@@ -8,8 +8,34 @@
 	<authorEmail>support@nevigen.eu</authorEmail>
 	<authorUrl>http://nevigen.eu/</authorUrl>
     <version>1.0</version>
-	<description>Plus and Minus Count Product</description>
+	<description>PLUS_AND_MINUS_COUNT_PRODUCT</description>
 	<files>
 		<filename plugin="pppplus_minus_category_product">pppplus_minus_category_product.php</filename>
 	</files>
+	<config>
+		<fields name="params">
+			<fieldset name="basic">
+
+				<field name="categories_exclude"
+						type="sql"
+						default=""
+						label="Select an Category"
+					   	description="Select categories to exclude"
+						query="SELECT `category_id`, `name_ru-RU` FROM `#__jshopping_categories` "
+						key_field="category_id"
+						value_field="name_ru-RU"
+						required="false"
+						multiple="true" />
+
+
+
+
+			</fieldset>
+		</fields>
+	</config>
 </extension>
+
+<!--
+Install :
+https://github.com/Gartes-JoomShopping/pppplus_minus_category_product/archive/master.zip
+-->

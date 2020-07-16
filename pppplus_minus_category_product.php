@@ -1,136 +1,110 @@
 <?php
-/**
- * @package Joomla.JoomShopping.Products
- * @version 1.7.0
- * @author Linfuby (Meling Vadim)
- * @website http://dell3r.ru/
- * @email support@dell3r.ru
- * @copyright Copyright by Linfuby. All rights reserved.
- * @license The MIT License (MIT); See \components\com_jshopping\addons\jshopping_plus_minus_count_product\license.txt
- */
+
+use Joomla\Registry\Registry;
+
 defined('_JEXEC') or die('Restricted access');
 jimport('joomla.application.component.controller');
 
-class plgJshoppingProductsPppplus_Minus_Category_Product extends JPlugin{
+class plgJshoppingProductsPppplus_Minus_Category_Product extends JPlugin
+{
+
+    protected $app;
+
+    /**
+     * Affects constructor behavior. If true, language files will be loaded automatically.
+     *
+     * @var    boolean
+     * @since  3.1
+     */
+    protected $autoloadLanguage = true;
+    /**
+     * extension_id this plugin
+     * @var integer
+     * @since 3.9
+     */
+    protected $_extension_id;
+    /**
+     * @var string
+     * @since version
+     */
+    private $addQuery = null;
+
 
     public function __construct(&$subject, $config = array())
     {
+        $params = $config['params'] ;
         parent::__construct($subject, $config = array());
-//        die(__FILE__ .' '. __LINE__ );
-    }
 
-    /**
-     * onAfterInitialise.
-     *
-     * @return  void
-     *
-     * @since   1.0
-     */
-    public function onAfterInitialise()
-    {
-
-
-    }
-
-    /**
-     * onAfterRoute.
-     *
-     * @return  void
-     *
-     * @since   1.0
-     */
-    public function onAfterRoute()
-    {
-
-    }
-
-    /**
-     * onAfterDispatch.
-     *
-     * @return  void
-     *
-     * @since   1.0
-     */
-    public function onAfterDispatch()
-    {
-
-    }
-
-    /**
-     * onAfterRender.
-     *
-     * @return  void
-     *
-     * @since   1.0
-     */
-    public function onAfterRender()
-    {
-        // Access to plugin parameters
-        $sample = $this->params->get('sample', '42');
-    }
-
-    /**
-     * onAfterCompileHead.
-     *
-     * @return  void
-     *
-     * @since   1.0
-     */
-    public function onAfterCompileHead()
-    {
-
-    }
-
-    /**
-     * OnAfterCompress.
-     *
-     * @return  void
-     *
-     * @since   1.0
-     */
-    public function onAfterCompress()
-    {
-
-    }
-
-    /**
-     * onAfterRespond.
-     *
-     * @return  void
-     *
-     * @since   1.0
-     */
-    public function onAfterRespond()
-    {
-
-    }
-
-
-    public function onBeforeLoadProductList(){
-//        die(__FILE__ .' '. __LINE__ );
-    }
-
-    public function onBeforeQueryCountProductList($type,  &$adv_result, &$adv_from, &$adv_query, &$filters)
-    {
-        echo'<pre>';print_r( $this->params );echo'</pre>'.__FILE__.' '.__LINE__;
-        die(__FILE__ .' '. __LINE__ );
-
-
-        echo'<pre>';print_r( $adv_query );echo'</pre>'.__FILE__.' '.__LINE__;
         
-        die(__FILE__ .' '. __LINE__ );
+
+
+
+
+        # extension_id this plugin
+        $this->_extension_id = $config['id'];
+
+        // Get the parameters.
+        if ( !empty( $params ))
+        {
+            
+            if ($config['params'] instanceof Registry)
+            {
+                $this->params = $config['params'];
+            }
+            else
+            {
+                $this->params = new Registry($params);
+            }
+        }
+        
+        $app = \JFactory::getApplication() ;
+        $currentCategory = $app->input->get('category_id') ;
+        $categories_exclude = $this->params->get('categories_exclude') ;
+
+        if ( empty ($categories_exclude) )  return ; #END IF
+        if ( in_array( $currentCategory ,  $categories_exclude ))  return ; #END IF
+
+        $categories_exclude_implode = implode(',' , $categories_exclude  ) ;
+        $this->addQuery  = " AND pr_cat.category_id NOT IN ( ".$categories_exclude_implode."  ) " ;
+    }
+
+
+    public function onBeforeLoadProductList()
+    {
+//        die(__FILE__ .' '. __LINE__ );
+    }
+
+    public function onBeforeQueryCountProductList($type, &$adv_result, &$adv_from, &$adv_query, &$filters)
+    {
+
+
+        $adv_query  = $adv_query . $this->addQuery ;
+        return true ;
+        echo'<pre>';print_r( $categories_exclude );echo'</pre>'.__FILE__.' '.__LINE__;
+        echo'<pre>';print_r( $categories_exclude_implode );echo'</pre>'.__FILE__.' '.__LINE__;
+ 
+        echo'<pre>';print_r( $adv_query );echo'</pre>'.__FILE__.' '.__LINE__;
+        echo'<pre>';print_r( $addQuery );echo'</pre>'.__FILE__.' '.__LINE__;
+
+        
+
+
     }
 
     public function onBeforeQueryGetProductList($type, &$adv_result, &$adv_from, &$adv_query, &$order_query, &$filters)
     {
-        die(__FILE__ .' '. __LINE__ );
+        $adv_query  = $adv_query . $this->addQuery ;
+        return true ;
+
     }
 
-	function onBeforeDisplayProductListView(&$view){
-		die(__FILE__ .' '. __LINE__ );
+    function onBeforeDisplayProductListView(&$view)
+    {
+//        die(__FILE__ . ' ' . __LINE__);
     }
 
-	function onBeforeDisplayProductView(&$view){
-		die(__FILE__ .' '. __LINE__ );
+    function onBeforeDisplayProductView(&$view)
+    {
+//        die(__FILE__ . ' ' . __LINE__);
     }
 }
