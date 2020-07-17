@@ -18,7 +18,7 @@
 		<fields name="params">
 			<fieldset name="basic">
 
-				<field name="categories_exclude"
+				<!--<field name="categories_exclude"
 						type="sql"
 						default=""
 						label="Select an Category"
@@ -27,7 +27,7 @@
 						key_field="category_id"
 						value_field="name_ru-RU"
 						required="false"
-						multiple="true" />
+						multiple="true" />-->
 
 
 
