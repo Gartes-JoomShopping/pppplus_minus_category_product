@@ -10,6 +10,8 @@
     <version>1.0</version>
 	<description>PLUS_AND_MINUS_COUNT_PRODUCT</description>
 	<files>
+		<folder>assets</folder>
+		<folder>language</folder>
 		<filename plugin="pppplus_minus_category_product">pppplus_minus_category_product.php</filename>
 	</files>
 	<config>
