@@ -99,6 +99,29 @@ class plgJshoppingProductsPppplus_Minus_Category_Product extends JPlugin
         echo'<pre>';print_r( $addQuery );echo'</pre>'.__FILE__.' '.__LINE__;*/
     }
 
+
+
+
+    /**
+     * Переопределение пути шаблона для редактировании товара
+     * Для плагинов группы jshoppingproducts
+     * @param $view
+     *
+     *
+     * @since version
+     */
+    public function onBeforeDisplayEditProductView( &$view ){
+        $view->addTemplatePath( JPATH_PLUGINS . '/jshoppingproducts/pppplus_minus_category_product/views/product_edit/') ;
+        
+        
+
+        
+        
+    }
+
+
+
+
     /**
      * @var string
      * @since version
@@ -110,12 +133,25 @@ class plgJshoppingProductsPppplus_Minus_Category_Product extends JPlugin
         'prod.average_rating',
         'prod.hits',
         'pr_cat.product_ordering',
-        ] ;
+    ] ;
 
-
-
+    /**
+     * Событие перед посторением запроса выборки товара для категории
+     * в этом методе можно изменить или добавить таблицу  LEFT JOIN
+     * и порядок сортировки товаров для категории
+     * @param $order
+     * @param $orderby
+     * @param $adv_from
+     * @param $order_query
+     * @param $order_original
+     *
+     *
+     * @since version
+     */
     public function onBuildQueryOrderListProduct($order, $orderby, &$adv_from, &$order_query, $order_original)
     {
+
+
 
        $session = JFactory::getSession();
 
@@ -221,48 +257,6 @@ die(__FILE__ .' '. __LINE__ );
     public function onBeforeQueryGetProductList($type, &$adv_result, &$adv_from, &$adv_query, &$order_query, &$filters)
     {
 
-
-
-//        die(__FILE__ .' '. __LINE__ );
-
-
-//        $category = JSFactory::getTable('category', 'jshop');
-//        $category->load($this->currentCategory);
-//        $productlist = JSFactory::getModel('productList', 'jshop');
-
-      /*  echo'<pre>';print_r( $category );echo'</pre>'.__FILE__.' '.__LINE__;
-        die(__FILE__ .' '. __LINE__ );*/
-
-
-
-
-       try
-       {
-           // Code that may throw an Exception or Error.
-//           $productlist->setModel($category);
-//           $productlist->load();
-//           $orderBy = $productlist->getOrderBy();
-           // throw new Exception('Code Exception '.__FILE__.':'.__LINE__) ;
-       }
-       catch (Exception $e)
-       {
-           // Executed only in PHP 5, will not be reached in PHP 7
-           echo 'Выброшено исключение: ',  $e->getMessage(), "\n";
-           echo'<pre>';print_r( $e );echo'</pre>'.__FILE__.' '.__LINE__;
-           die(__FILE__ .' '. __LINE__ );
-       }
-
-
-//        echo'<pre>';print_r( $orderBy );echo'</pre>'.__FILE__.' '.__LINE__;
-//        echo'<pre>';print_r( $this->Sub_Categories );echo'</pre>'.__FILE__.' '.__LINE__;
-
-
-       
-
-
-        /*$adv_query  = $adv_query . $this->addQuery ;
-        return true ;*/
-
     }
 
     function onBeforeDisplayProductListView(&$view)
@@ -273,5 +267,34 @@ die(__FILE__ .' '. __LINE__ );
     function onBeforeDisplayProductView(&$view)
     {
 //        die(__FILE__ . ' ' . __LINE__);
+    }
+
+    /**
+     * Точка входа Ajax
+     *
+     * @throws Exception
+     * @since 3.9
+     * @author Gartes
+     * @creationDate 2020-04-30, 16:59
+     * @see {url : https://docs.joomla.org/Using_Joomla_Ajax_Interface/ru }
+     */
+    public function onAjaxPppplus_minus_category_product ()
+    {
+
+        JLoader::registerNamespace( 'GNZ11', JPATH_LIBRARIES . '/GNZ11', $reset = false, $prepend = false, $type = 'psr4' );
+        JLoader::registerNamespace( 'Pppplus', JPATH_PLUGINS . '/jshoppingproducts/pppplus_minus_category_product', $reset = false, $prepend = false, $type = 'psr4' );
+
+        $helper = \Pppplus\Helpers\Helper::instance( $this->params );
+        $task = $this->app->input->get( 'task', null, 'STRING' );
+
+        try
+        {
+            // Code that may throw an Exception or Error.
+            $results = $helper->$task();
+        } catch (Exception $e)
+        {
+            $results = $e;
+        }
+        return $results;
     }
 }

@@ -1,0 +1,37 @@
+.headFields .control{float: left;}
+
+.headFields .control.hits .control-label {
+    width: 21px;
+}
+
+.headFields .control > div {
+    float: left;
+    /* display: inline-block; */
+    width: 480px;
+}
+
+.headFields .control.hits .control-input {
+    width: 90px;
+}
+
+.headFields .control.hits .control-input+div {
+    margin-left: 4px;
+    margin-top: 2px;
+}
+
+.headFields .control.hits .control-input input {
+    width: calc(100% - 12px);
+}
+
+.headFields .control.hits {}
+
+.headFields .control > div.control-label {
+    margin-right: 7px;
+    width: 183px;
+    margin-top: 4px;
+}
+
+.headFields {
+    width: 100%;
+    float: left;
+}
