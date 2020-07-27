@@ -295,6 +295,6 @@ die(__FILE__ .' '. __LINE__ );
         {
             $results = $e;
         }
-        return $results;
+//        return $results;
     }
 }
