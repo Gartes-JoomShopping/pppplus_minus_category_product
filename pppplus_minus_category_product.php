@@ -39,25 +39,37 @@ class plgJshoppingProductsPppplus_Minus_Category_Product extends JPlugin
 
     public function __construct(&$subject, $config = array())
     {
+
+
+
+
         $params = $config['params'] ;
         parent::__construct($subject, $config = array());
         # extension_id this plugin
 
-        $this->_extension_id = $config['id'];
+        $this->_extension_id = 0 ;
+        if( isset( $config['id'] ) )
+        {
+            $this->_extension_id = $config['id'];
+        }#END IF
+
+
+
+
+
 
         // Get the parameters.
-        if ( !empty( $params ))
+        if( isset( $config['params'] ) )
         {
-            
             if ($config['params'] instanceof Registry)
             {
                 $this->params = $config['params'];
             }
-            else
-            {
-                $this->params = new Registry($params);
-            }
-        }
+        } else
+        {
+            $this->params = new Registry($params);
+        }#END IF
+
         
         $this->app = \JFactory::getApplication() ;
         $Table_Category = JTable::getInstance("Category", "JShop");
